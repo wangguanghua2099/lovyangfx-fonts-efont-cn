@@ -1,0 +1,60 @@
+NOTICE
+======
+
+lovyangfx-fonts-efont-cn — bundled font data, provenance and obligations
+------------------------------------------------------------------------
+Copyright (c) 2026 wangguanghua2099
+The crate's own code (Rust sources, tests, docs) is licensed under the MIT
+License — see LICENSE.
+
+1. What this crate ships
+------------------------
+Unlike `lovyangfx-fonts` (which deliberately ships no font data), THIS crate
+bundles 20 pre-extracted glyph blobs under `fonts/`: eFont CN, sizes
+10/12/14/16/24 px, each in regular/bold/italic/bold-italic. They were
+extracted with `lgyf-gen` (from lovyangfx-fonts) out of LovyanGFX'
+`src/lgfx/Fonts/efont/lgfx_efont_cn.c`. Extraction is length-checked against
+the upstream array declarations and every blob is regression-tested
+(golden byte sizes + a ~23.9k-codepoint decode sweep) in this crate's test
+suite; `fonts/SHA256SUMS` pins the shipped bytes.
+
+2. Where the glyph data comes from
+----------------------------------
+The u8g2-format arrays shipped by LovyanGFX (e.g. `lgfx_efont_cn_14`) are
+themselves converted from the /efont Electronic Font Open Laboratory fonts.
+Two upstream notices apply to this data, and both are reproduced verbatim in
+this package:
+
+  licenses/efont-COPYRIGHT.txt      /efont, BSD-3-Clause-style
+  licenses/LovyanGFX-FreeBSD.txt    lovyan03, FreeBSD License (BSD-2-style)
+
+Both permit redistribution in source and binary form, with or without
+modification, including commercial use. Their conditions are:
+
+  * keep the copyright notice, condition list and disclaimer when you
+    redistribute source;
+  * reproduce that same notice in the documentation or other materials that
+    accompany a binary redistribution — i.e. if you flash a firmware image
+    containing these fonts, or publish a crate/repo containing them, ship
+    these two notices along with it;
+  * do not use the /efont team or contributor names to endorse derived
+    products.
+
+This package fulfills those obligations for its own distribution: the two
+notices ship inside the published crate.
+
+3. Your obligations when you redistribute
+-----------------------------------------
+If your project bundles blobs obtained from this crate (or re-extracted from
+the same upstream), copy `licenses/` (or the two notices) next to the data or
+into your docs, and mention in your README that the bitmap font is derived
+from /efont via LovyanGFX. If your project is already MIT-licensed, that is
+fine — the notices above simply accompany the data; **the font data is not
+relicensed**: do not mark it as MIT.
+
+4. Affiliation
+--------------
+This project is independent. It is not affiliated with, endorsed by, or
+sponsored by lovyan03, the LovyanGFX project, or /efont / The Electronic Font
+Open Laboratory. Those names are used only to describe the data format and
+its origin.

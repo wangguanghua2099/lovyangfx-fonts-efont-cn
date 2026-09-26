@@ -1,0 +1,89 @@
+[package]
+name = "lovyangfx-fonts-efont-cn"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT"
+description = "eFont CN bitmap fonts for lovyangfx-fonts: 5 sizes x 4 styles (regular/bold/italic/bold-italic) in u8g2 wire format, LovyanGFX-compatible glyphs. CJK bold/italic is rare among embedded bitmap font sets."
+readme = "README.en.md"
+repository = "https://github.com/wangguanghua2099/lovyangfx-fonts-efont-cn"
+keywords = ["efont", "u8g2", "chinese", "font", "gb2312"]
+categories = ["no-std", "embedded", "graphics"]
+# fonts/ 与 licenses/ 是包的义务内容（见 NOTICE），必须随包分发
+include = [
+    "/src",
+    "/fonts",
+    "/tests",
+    "/examples",
+    "/README.md",
+    "/README.en.md",
+    "/CHANGELOG.md",
+    "/LICENSE",
+    "/NOTICE",
+    "/licenses",
+]
+
+[package.metadata.docs.rs]
+all-features = true
+
+[dependencies]
+lovyangfx-fonts = { version = "0.1", default-features = false }
+
+[features]
+default = ["efont-cn-all"]
+# 单个字体：字号-样式。b=bold 粗体，i=italic 斜体，bi=bold-italic 粗斜体
+efont-cn-10 = []
+efont-cn-10-b = []
+efont-cn-10-bi = []
+efont-cn-10-i = []
+efont-cn-12 = []
+efont-cn-12-b = []
+efont-cn-12-bi = []
+efont-cn-12-i = []
+efont-cn-14 = []
+efont-cn-14-b = []
+efont-cn-14-bi = []
+efont-cn-14-i = []
+efont-cn-16 = []
+efont-cn-16-b = []
+efont-cn-16-bi = []
+efont-cn-16-i = []
+efont-cn-24 = []
+efont-cn-24-b = []
+efont-cn-24-bi = []
+efont-cn-24-i = []
+# 五个常规字号
+efont-cn = [
+    "efont-cn-10",
+    "efont-cn-12",
+    "efont-cn-14",
+    "efont-cn-16",
+    "efont-cn-24",
+]
+# 全部 20 个变体
+efont-cn-all = [
+    "efont-cn",
+    "efont-cn-10-b",
+    "efont-cn-10-bi",
+    "efont-cn-10-i",
+    "efont-cn-12-b",
+    "efont-cn-12-bi",
+    "efont-cn-12-i",
+    "efont-cn-14-b",
+    "efont-cn-14-bi",
+    "efont-cn-14-i",
+    "efont-cn-16-b",
+    "efont-cn-16-bi",
+    "efont-cn-16-i",
+    "efont-cn-24-b",
+    "efont-cn-24-bi",
+    "efont-cn-24-i",
+]
+
+[[example]]
+name = "text_metrics"
+required-features = ["efont-cn-14"]
+
+[profile.release]
+opt-level = "s"
+lto = true

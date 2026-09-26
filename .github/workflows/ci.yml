@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: rustfmt
+        run: cargo fmt --check
+
+      - name: clippy (default = all fonts)
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: clippy (no fonts)
+        run: cargo clippy --no-default-features --all-targets -- -D warnings
+
+      - name: full regression (default = all fonts)
+        run: cargo test
+
+      - name: build without any font
+        run: cargo build --no-default-features
+
+      # crates.io 拒绝超过 10 MB 的包；当前 ≈ 6.4 MB，留了余量也要守着
+      - name: package size guard
+        run: |
+          cargo package --no-verify
+          SIZE=$(stat -c%s target/package/lovyangfx-fonts-efont-cn-0.1.0.crate)
+          echo "package size: $SIZE bytes"
+          test "$SIZE" -lt 10485760
