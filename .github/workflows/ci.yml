@@ -33,6 +33,6 @@ jobs:
       - name: package size guard
         run: |
           cargo package --no-verify
-          SIZE=$(stat -c%s target/package/lovyangfx-fonts-efont-cn-0.1.0.crate)
+          SIZE=$(stat -c%s target/package/lovyangfx-fonts-efont-cn-*.crate)
           echo "package size: $SIZE bytes"
           test "$SIZE" -lt 10485760

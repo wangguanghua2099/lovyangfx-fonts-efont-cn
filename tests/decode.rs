@@ -129,41 +129,46 @@ fn suite(font: Font<'static>, name: &str, expected_bytes: usize) {
 }
 
 /// 为每个启用的字体变体生成一个测试；未启用的 feature 展开为空。
+/// 0.2 起本包是纯数据：测试通过 dev-dependency 引解码器，自己建句柄。
 macro_rules! per_font {
-    ($($(#[$cfg:meta])* $test:ident => $fn:path, $bytes:literal;)*) => {
+    ($($(#[$cfg:meta])* $test:ident => $blob:ident, $bytes:literal;)*) => {
         $(
             $(#[$cfg])*
             #[test]
             fn $test() {
-                suite($fn(), stringify!($fn), $bytes);
+                suite(
+                    Font::new(fonts::$blob).expect("bundled blob is a valid u8g2 font"),
+                    stringify!($blob),
+                    $bytes,
+                );
             }
         )*
     };
 }
 
 per_font! {
-    #[cfg(feature = "efont-cn-10")]    efont_cn_10    => fonts::efont_cn_10,    158417;
-    #[cfg(feature = "efont-cn-10-b")]  efont_cn_10_b  => fonts::efont_cn_10_b,  159551;
-    #[cfg(feature = "efont-cn-10-bi")] efont_cn_10_bi => fonts::efont_cn_10_bi, 174904;
-    #[cfg(feature = "efont-cn-10-i")]  efont_cn_10_i  => fonts::efont_cn_10_i,  170008;
+    #[cfg(feature = "efont-cn-10")]    efont_cn_10    => EFONT_CN_10_BLOB,    158417;
+    #[cfg(feature = "efont-cn-10-b")]  efont_cn_10_b  => EFONT_CN_10_B_BLOB,  159551;
+    #[cfg(feature = "efont-cn-10-bi")] efont_cn_10_bi => EFONT_CN_10_BI_BLOB, 174904;
+    #[cfg(feature = "efont-cn-10-i")]  efont_cn_10_i  => EFONT_CN_10_I_BLOB,  170008;
 
-    #[cfg(feature = "efont-cn-12")]    efont_cn_12    => fonts::efont_cn_12,    213444;
-    #[cfg(feature = "efont-cn-12-b")]  efont_cn_12_b  => fonts::efont_cn_12_b,  211952;
-    #[cfg(feature = "efont-cn-12-bi")] efont_cn_12_bi => fonts::efont_cn_12_bi, 235895;
-    #[cfg(feature = "efont-cn-12-i")]  efont_cn_12_i  => fonts::efont_cn_12_i,  232931;
+    #[cfg(feature = "efont-cn-12")]    efont_cn_12    => EFONT_CN_12_BLOB,    213444;
+    #[cfg(feature = "efont-cn-12-b")]  efont_cn_12_b  => EFONT_CN_12_B_BLOB,  211952;
+    #[cfg(feature = "efont-cn-12-bi")] efont_cn_12_bi => EFONT_CN_12_BI_BLOB, 235895;
+    #[cfg(feature = "efont-cn-12-i")]  efont_cn_12_i  => EFONT_CN_12_I_BLOB,  232931;
 
-    #[cfg(feature = "efont-cn-14")]    efont_cn_14    => fonts::efont_cn_14,    262233;
-    #[cfg(feature = "efont-cn-14-b")]  efont_cn_14_b  => fonts::efont_cn_14_b,  267590;
-    #[cfg(feature = "efont-cn-14-bi")] efont_cn_14_bi => fonts::efont_cn_14_bi, 293038;
-    #[cfg(feature = "efont-cn-14-i")]  efont_cn_14_i  => fonts::efont_cn_14_i,  288018;
+    #[cfg(feature = "efont-cn-14")]    efont_cn_14    => EFONT_CN_14_BLOB,    262233;
+    #[cfg(feature = "efont-cn-14-b")]  efont_cn_14_b  => EFONT_CN_14_B_BLOB,  267590;
+    #[cfg(feature = "efont-cn-14-bi")] efont_cn_14_bi => EFONT_CN_14_BI_BLOB, 293038;
+    #[cfg(feature = "efont-cn-14-i")]  efont_cn_14_i  => EFONT_CN_14_I_BLOB,  288018;
 
-    #[cfg(feature = "efont-cn-16")]    efont_cn_16    => fonts::efont_cn_16,    318199;
-    #[cfg(feature = "efont-cn-16-b")]  efont_cn_16_b  => fonts::efont_cn_16_b,  320446;
-    #[cfg(feature = "efont-cn-16-bi")] efont_cn_16_bi => fonts::efont_cn_16_bi, 357031;
-    #[cfg(feature = "efont-cn-16-i")]  efont_cn_16_i  => fonts::efont_cn_16_i,  346363;
+    #[cfg(feature = "efont-cn-16")]    efont_cn_16    => EFONT_CN_16_BLOB,    318199;
+    #[cfg(feature = "efont-cn-16-b")]  efont_cn_16_b  => EFONT_CN_16_B_BLOB,  320446;
+    #[cfg(feature = "efont-cn-16-bi")] efont_cn_16_bi => EFONT_CN_16_BI_BLOB, 357031;
+    #[cfg(feature = "efont-cn-16-i")]  efont_cn_16_i  => EFONT_CN_16_I_BLOB,  346363;
 
-    #[cfg(feature = "efont-cn-24")]    efont_cn_24    => fonts::efont_cn_24,    550804;
-    #[cfg(feature = "efont-cn-24-b")]  efont_cn_24_b  => fonts::efont_cn_24_b,  564226;
-    #[cfg(feature = "efont-cn-24-bi")] efont_cn_24_bi => fonts::efont_cn_24_bi, 601696;
-    #[cfg(feature = "efont-cn-24-i")]  efont_cn_24_i  => fonts::efont_cn_24_i,  576487;
+    #[cfg(feature = "efont-cn-24")]    efont_cn_24    => EFONT_CN_24_BLOB,    550804;
+    #[cfg(feature = "efont-cn-24-b")]  efont_cn_24_b  => EFONT_CN_24_B_BLOB,  564226;
+    #[cfg(feature = "efont-cn-24-bi")] efont_cn_24_bi => EFONT_CN_24_BI_BLOB, 601696;
+    #[cfg(feature = "efont-cn-24-i")]  efont_cn_24_i  => EFONT_CN_24_I_BLOB,  576487;
 }

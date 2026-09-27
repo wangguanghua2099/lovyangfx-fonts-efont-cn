@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 The format follows [keep-a-changelog](https://keepachangelog.com/) and semver.
 
+## 0.2.0 — 2026-09-27
+
+### Changed (breaking)
+
+- This crate is now **pure data**: zero runtime dependencies, blob constants
+  only. The `efont_cn_*() -> Font` accessor functions are removed together with
+  the runtime dependency on `lovyangfx-fonts`.
+- Rationale: `lovyangfx-fonts` 0.2 bridges this crate as an *optional
+  dependency* (one-line bundled-font access via its `fonts` module). A runtime
+  dependency in the other direction would either form a package cycle or drag a
+  second decoder copy (with an incompatible `Font` type) into every build.
+- Migration: `efont_cn_14()` becomes either
+  `Font::new(lovyangfx_fonts_efont_cn::EFONT_CN_14_BLOB).unwrap()` here, or the
+  same-name accessor `lovyangfx_fonts::fonts::efont_cn_14()` on the main crate
+  0.2. The blob constants are unchanged (byte-identical), feature names match
+  on both sides.
+
+### Added
+
+- `[dev-dependencies] lovyangfx-fonts` so the full per-font regression suite
+  (golden sizes, ~23.9k-codepoint sweep) still runs here by default.
+
 ## 0.1.0 — 2026-09-27
 
 ### Added

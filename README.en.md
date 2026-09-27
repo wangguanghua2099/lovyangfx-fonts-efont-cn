@@ -18,27 +18,47 @@ The main crate is deliberately "code open, data bring-your-own" (keeping the pac
 
 ## Usage
 
+Since 0.2 this package is **pure data** (zero dependencies, blob constants only,
+no decoder). Two routes:
+
+**Route 1 (recommended): one line via the main crate** — its `fonts` module
+bridges this package through an optional dependency:
+
 ```toml
 [dependencies]
-lovyangfx-fonts = "0.1"                          # the decoder
-lovyangfx-fonts-efont-cn = "0.1"                 # all 20 variants by default
-# Just one font:
-# lovyangfx-fonts-efont-cn = { version = "0.1", default-features = false, features = ["efont-cn-14"] }
+lovyangfx-fonts = { version = "0.2", features = ["efont-cn-14"] }
 ```
 
 ```rust
-use lovyangfx_fonts_efont_cn::efont_cn_14;
+let font = lovyangfx_fonts::fonts::efont_cn_14();   // Font<'static>, zero-copy
+assert!(font.has_glyph('你'));
+```
 
-let font = efont_cn_14();                  // Font<'static>, zero-copy
+**Route 2: use this package directly** — build the decoder from the blob
+yourself (e.g. to flash the font to external storage and load it your own way):
+
+```toml
+[dependencies]
+lovyangfx-fonts = "0.2"                          # the decoder
+lovyangfx-fonts-efont-cn = "0.2"                 # all 20 variants by default
+# Just one font:
+# lovyangfx-fonts-efont-cn = { version = "0.2", default-features = false, features = ["efont-cn-14"] }
+```
+
+```rust
+use lovyangfx_fonts::Font;
+
+let font = Font::new(lovyangfx_fonts_efont_cn::EFONT_CN_14_BLOB).unwrap();
 assert!(font.has_glyph('你'));
 let width = font.text_width("你好AI");
 font.for_each_pixel("你好AI", 232, |x, y| {
     /* draw_pixel(x, y); */
 });
-# let _ = width;
 ```
 
-Full API (one pair per variant): `efont_cn_10() … efont_cn_24_bi()` return a `lovyangfx_fonts::Font<'static>`; `EFONT_CN_10_BLOB … EFONT_CN_24_BI_BLOB` expose the raw bytes (e.g. for flashing to external storage or custom loading).
+Data inventory: `EFONT_CN_10_BLOB … EFONT_CN_24_BI_BLOB` (20, feature-gated);
+the font accessors `efont_cn_10() … efont_cn_24_bi()` live in the main crate
+0.2's `fonts` module, with identical feature names on both sides.
 
 ## Font catalog
 

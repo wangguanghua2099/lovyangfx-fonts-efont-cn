@@ -1,6 +1,6 @@
 [package]
 name = "lovyangfx-fonts-efont-cn"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.75"
 license = "MIT"
@@ -26,7 +26,9 @@ include = [
 [package.metadata.docs.rs]
 all-features = true
 
-[dependencies]
+# 0.2 起是纯数据包：运行时零依赖。测试经 dev-dependency 引解码器——dev-dep
+# 不进消费者的依赖图，因此不会与主 crate 0.2 指向本包的 optional 依赖成环。
+[dev-dependencies]
 lovyangfx-fonts = { version = "0.1", default-features = false }
 
 [features]

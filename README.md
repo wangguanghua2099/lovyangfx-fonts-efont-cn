@@ -18,27 +18,43 @@
 
 ## 用法
 
+本包 0.2 起是**零依赖纯数据**（只有 blob 常量，不带解码器）。两条路：
+
+**路线一（推荐）：主 crate 一行开箱**——`fonts` 模块经 optional 依赖桥接本包：
+
 ```toml
 [dependencies]
-lovyangfx-fonts = "0.1"                          # 解码器
-lovyangfx-fonts-efont-cn = "0.1"                 # 默认带全部 20 个变体
-# 只要一个字体：
-# lovyangfx-fonts-efont-cn = { version = "0.1", default-features = false, features = ["efont-cn-14"] }
+lovyangfx-fonts = { version = "0.2", features = ["efont-cn-14"] }
 ```
 
 ```rust
-use lovyangfx_fonts_efont_cn::efont_cn_14;
+let font = lovyangfx_fonts::fonts::efont_cn_14();   // Font<'static>，零拷贝
+assert!(font.has_glyph('你'));
+```
 
-let font = efont_cn_14();                  // Font<'static>，零拷贝
+**路线二：直接用本包**——自己拿 blob 建解码器（比如要把字库烧到外部存储自管加载）：
+
+```toml
+[dependencies]
+lovyangfx-fonts = "0.2"                          # 解码器
+lovyangfx-fonts-efont-cn = "0.2"                 # 默认带全部 20 个变体
+# 只要一个字体：
+# lovyangfx-fonts-efont-cn = { version = "0.2", default-features = false, features = ["efont-cn-14"] }
+```
+
+```rust
+use lovyangfx_fonts::Font;
+
+let font = Font::new(lovyangfx_fonts_efont_cn::EFONT_CN_14_BLOB).unwrap();
 assert!(font.has_glyph('你'));
 let width = font.text_width("你好AI");
 font.for_each_pixel("你好AI", 232, |x, y| {
     /* draw_pixel(x, y); */
 });
-# let _ = width;
 ```
 
-全部 API（每个变体一组）：`efont_cn_10() … efont_cn_24_bi()` 返回 `lovyangfx_fonts::Font<'static>`；`EFONT_CN_10_BLOB … EFONT_CN_24_BI_BLOB` 暴露原始字节（比如要烧到外部存储或自管加载时用）。
+数据清单：`EFONT_CN_10_BLOB … EFONT_CN_24_BI_BLOB`（20 个，按 feature 门控）；字体访问函数
+`efont_cn_10() … efont_cn_24_bi()` 在主 crate 0.2 的 `fonts` 模块里，feature 名两边一致。
 
 ## 字体清单
 
